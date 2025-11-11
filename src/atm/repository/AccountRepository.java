@@ -48,7 +48,7 @@ public class AccountRepository {
 
         // Hiển thị danh sách tài khoản
         for (Account acc : accounts.values()) {
-            System.out.printf("  - Tài khoản: %s | PIN: %-5s | Số dư: %,10.0f VND%n",
+            System.out.printf("  - Tài khoản: %s | PIN: %-5s | Số dư: %,10.0f VND\n",
                     acc.getAccountNumber(),
                     acc.getPin(),
                     acc.getBalance());
