@@ -13,24 +13,24 @@ import java.util.Scanner;
  * Class chính chạy ứng dụng ATM
  */
 public class Main {
-    
+
     private static Scanner scanner = new Scanner(System.in);
     private static ATMService atmService = new ATMService();
-    
+
     public static void main(String[] args) {
         System.out.println("\n");
         System.out.println("╔═══════════════════════════════════════════╗");
         System.out.println("║      CHÀO MỪNG ĐẾN VỚI HỆ THỐNG ATM       ║");
         System.out.println("╚═══════════════════════════════════════════╝\n");
-        
+
         // Vòng lặp chính của ATM
         while (true) {
             Account loggedInAccount = login();
-            
+
             if (loggedInAccount != null) {
                 showATMMenu(loggedInAccount);
             }
-            
+
             System.out.print("\nBạn có muốn tiếp tục sử dụng ATM? (c/k): ");
             String choice = scanner.next();
             if (choice.equalsIgnoreCase("k")) {
@@ -39,7 +39,7 @@ public class Main {
                 break;
             }
         }
-        
+
         scanner.close();
     }
 
@@ -51,29 +51,29 @@ public class Main {
         System.out.println("┌─────────────────────────────────────┐");
         System.out.println("│         ĐĂNG NHẬP HỆ THỐNG          │");
         System.out.println("└─────────────────────────────────────┘");
-        
+
         int attempts = 0;
         final int MAX_ATTEMPTS = 3;
-        
+
         while (attempts < MAX_ATTEMPTS) {
             try {
                 System.out.print("Nhập số tài khoản: ");
                 String accountNumber = scanner.next();
-                
+
                 System.out.print("Nhập mã PIN: ");
                 String pin = scanner.next();
-                
+
                 Account account = atmService.login(accountNumber, pin);
-                
+
                 System.out.println("\n✓ Đăng nhập thành công!");
                 System.out.println("✓ Xin chào, " + account.getAccountHolderName() + "!");
-                
+
                 return account;
-                
+
             } catch (InvalidCredentialsException e) {
                 attempts++;
                 System.out.println("\n✗ " + e.getMessage());
-                
+
                 if (attempts < MAX_ATTEMPTS) {
                     System.out.println("✗ Bạn còn " + (MAX_ATTEMPTS - attempts) + " lần thử");
                 } else {
@@ -83,16 +83,16 @@ public class Main {
                 }
             }
         }
-        
+
         return null;
     }
-    
+
     /**
      * Hiển thị menu ATM
      */
     private static void showATMMenu(Account account) {
         boolean continueSession = true;
-        
+
         while (continueSession) {
             System.out.println("\n");
             System.out.println("╔═══════════════════════════════════════════╗");
@@ -106,10 +106,10 @@ public class Main {
             System.out.println("║  6. Đăng xuất                             ║");
             System.out.println("╚═══════════════════════════════════════════╝");
             System.out.print("Chọn chức năng (1-6): ");
-            
+
             try {
                 int choice = scanner.nextInt();
-                
+
                 switch (choice) {
                     case 1:
                         checkBalance(account);
@@ -134,7 +134,7 @@ public class Main {
                     default:
                         System.out.println("\n✗ Lựa chọn không hợp lệ! Vui lòng chọn từ 1-5.");
                 }
-                
+
             } catch (Exception e) {
                 System.out.println("\n✗ Lỗi: Vui lòng nhập số từ 1-5!");
                 scanner.nextLine(); // Clear buffer
@@ -150,11 +150,11 @@ public class Main {
         System.out.println("┌─────────────────────────────────────┐");
         System.out.println("│           KIỂM TRA SỐ DƯ            │");
         System.out.println("└─────────────────────────────────────┘");
-        
+
         double balance = atmService.checkBalance(account.getAccountNumber());
         System.out.printf("Số dư hiện tại: %,15.0f VND\n", balance);
     }
-    
+
     /**
      * Rút tiền
      */
@@ -182,7 +182,7 @@ public class Main {
 
         try {
             int choice = scanner.nextInt();
-            double amount = 0;
+            double amount;
 
             switch (choice) {
                 case 1:
@@ -237,7 +237,7 @@ public class Main {
             scanner.nextLine(); // Clear buffer
         }
     }
-    
+
     /**
      * Nạp tiền
      */
@@ -246,19 +246,19 @@ public class Main {
         System.out.println("┌─────────────────────────────────────┐");
         System.out.println("│             NẠP TIỀN                │");
         System.out.println("└─────────────────────────────────────┘");
-        
+
         System.out.printf("Số dư hiện tại: %,15.0f VND\n", account.getBalance());
         System.out.print("Nhập số tiền cần nạp: ");
-        
+
         try {
             double amount = scanner.nextDouble();
-            
+
             atmService.deposit(account, amount);
-            
+
             System.out.println("\n✓ Nạp tiền thành công!");
             System.out.printf("✓ Số tiền đã nạp: %,15.0f VND\n", amount);
             System.out.printf("✓ Số dư mới: %,15.0f VND\n", account.getBalance());
-            
+
         } catch (InvalidAmountException e) {
             System.out.println("\n✗ " + e.getMessage());
         } catch (Exception e) {
@@ -306,71 +306,57 @@ public class Main {
         int attempts = 0;
         final int MAX_ATTEMPTS = 3;
 
-
         try {
-            // Xác thực PIN cũ
+            //Nhập PIN cũ (có giới hạn số lần thử)
             String oldPin = null;
             while (attempts < MAX_ATTEMPTS) {
                 System.out.print("\nNhập mã PIN hiện tại: ");
                 oldPin = scanner.next();
 
-                if (!account.verifyPin(oldPin)) {
+                try {
+                    if (!account.verifyPin(oldPin)) {
+                        throw new InvalidCredentialsException("Mã PIN hiện tại không đúng!");
+                    }
+                    break; // PIN đúng, thoát vòng lặp
+
+                } catch (InvalidCredentialsException e) {
                     attempts++;
-                    System.out.println("\n✗ Mã PIN hiện tại không đúng!");
+                    System.out.println("\n✗ " + e.getMessage());
 
                     if (attempts < MAX_ATTEMPTS) {
                         System.out.println("→ Vui lòng thử lại (còn " + (MAX_ATTEMPTS - attempts) + " lần)\n");
-                        continue;
                     } else {
                         System.out.println("\n✗ Bạn đã nhập sai quá nhiều lần!");
                         System.out.println("✗ Giao dịch bị hủy. Vui lòng thử lại sau.");
                         return;
                     }
                 }
-                // PIN cũ đúng, thoát vòng lặp
-                break;
             }
 
             //Nhập PIN mới
-            attempts = 0;
+            attempts = 0; // Reset số lần thử
             String newPin = null;
             while (attempts < MAX_ATTEMPTS) {
                 System.out.print("Nhập mã PIN mới (4 chữ số): ");
                 newPin = scanner.next();
 
-                // Validate PIN mới
-                if (!isValidPin(newPin)) {
+                try {
+                    // GỌI SERVICE để validate
+                    atmService.validateNewPin(newPin, oldPin);
+                    break; // Hợp lệ, thoát vòng lặp
+
+                } catch (IllegalArgumentException e) {
                     attempts++;
-                    System.out.println("\n✗ Mã PIN không hợp lệ!");
-                    System.out.println(" - PIN phải có đúng 4 chữ số");
-                    System.out.println(" - PIN chỉ chứa số (0-9)");
+                    System.out.println("\n✗ " + e.getMessage());
 
                     if (attempts < MAX_ATTEMPTS) {
                         System.out.println("→ Vui lòng thử lại (còn " + (MAX_ATTEMPTS - attempts) + " lần)\n");
-                        continue;
                     } else {
                         System.out.println("\n✗ Bạn đã nhập sai quá nhiều lần!");
                         System.out.println("✗ Giao dịch bị hủy. Vui lòng thử lại sau.");
                         return;
                     }
                 }
-
-                // Kiểm tra PIN mới không trùng PIN cũ
-                if (newPin.equals(oldPin)) {
-                    attempts++;
-                    System.out.println("\n✗ Mã PIN mới phải khác mã PIN cũ!");
-
-                    if (attempts < MAX_ATTEMPTS) {
-                        System.out.println("→ Vui lòng thử lại (còn " + (MAX_ATTEMPTS - attempts) + " lần)\n");
-                        continue;
-                    } else {
-                        System.out.println("\n✗ Bạn đã nhập sai quá nhiều lần!");
-                        System.out.println("✗ Giao dịch bị hủy. Vui lòng thử lại sau.");
-                        return;
-                    }
-                }
-                // PIN hợp lệ, thoát vòng lặp
-                break;
             }
 
             //Xác nhận PIN mới
@@ -385,20 +371,19 @@ public class Main {
 
                     if (attempts < MAX_ATTEMPTS) {
                         System.out.println("→ Vui lòng thử lại (còn " + (MAX_ATTEMPTS - attempts) + " lần)\n");
-                        continue;
                     } else {
                         System.out.println("\n✗ Bạn đã nhập sai quá nhiều lần!");
                         System.out.println("✗ Giao dịch bị hủy. Vui lòng thử lại sau.");
                         return;
                     }
+                } else {
+                    // Xác nhận khớp, thoát vòng lặp
+                    break;
                 }
-                // Xác nhận khớp, thoát vòng lặp
-                break;
             }
 
-            //Thực hiện đổi PIN
-            account.setPin(newPin);
-            atmService.saveData(); // Lưu thay đổi vào file
+            //Lưu PIN mới (GỌI SERVICE)
+            atmService.changePin(account, oldPin, newPin);
 
             System.out.println("\n✓ Đổi mã PIN thành công!");
             System.out.println("✓ Vui lòng ghi nhớ mã PIN mới của bạn");
@@ -409,20 +394,5 @@ public class Main {
             scanner.nextLine(); // Clear buffer
         }
     }
-
-    /**
-     * Kiểm tra tính hợp lệ của PIN
-     */
-    private static boolean isValidPin(String pin) {
-        if (pin.length() < 4 || pin.length() > 6) {
-            return false;
-        }
-        // Kiểm tra chỉ chứa số
-        for (char c : pin.toCharArray()) {
-            if (!Character.isDigit(c)) {
-                return false;
-            }
-        }
-        return true;
-    }
 }
+
