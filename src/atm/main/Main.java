@@ -6,7 +6,6 @@ import atm.exception.InsufficientFundsException;
 import atm.exception.InvalidAmountException;
 import atm.exception.InvalidCredentialsException;
 import atm.service.ATMService;
-
 import java.util.List;
 import java.util.Scanner;
 
@@ -145,7 +144,7 @@ public class Main {
     private static void checkBalance(Account account) {
         System.out.println("\n");
         System.out.println("┌─────────────────────────────────────┐");
-        System.out.println("│          KIỂM TRA SỐ DỦ             │");
+        System.out.println("│           KIỂM TRA SỐ DƯ            │");
         System.out.println("└─────────────────────────────────────┘");
         
         double balance = atmService.checkBalance(account.getAccountNumber());
@@ -158,7 +157,7 @@ public class Main {
     private static void withdrawMoney(Account account) {
         System.out.println("\n");
         System.out.println("┌─────────────────────────────────────┐");
-        System.out.println("│             RÚT TIỀN                │");
+        System.out.println("│               RÚT TIỀN              │");
         System.out.println("└─────────────────────────────────────┘");
 
         System.out.printf("Số dư hiện tại: %,15.0f VND\n\n", account.getBalance());

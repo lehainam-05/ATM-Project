@@ -11,14 +11,13 @@ import java.util.Map;
  */
 public class FileManager {
 
-    private static final String DATA_FILE = "accounts.dat";
+    private static final String DATA_FILE = "accounts.ser";
 
     /**
      * Lưu Map tài khoản vào file bằng Serialization
      */
     public static void saveAccounts(Map<String, Account> accounts) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(
-                new FileOutputStream(DATA_FILE))) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(DATA_FILE))) {
             oos.writeObject(accounts);
             System.out.println("✓ Dữ liệu đã được lưu vào file: " + DATA_FILE);
         } catch (IOException e) {
@@ -33,6 +32,7 @@ public class FileManager {
      */
 
     public static Map<String, Account> loadAccounts() {
+        //Đối tượng tệp 'file' đc tạo là biểu diễn trừu tượng của tên đg dẫn tệp
         File file = new File(DATA_FILE);
 
         // Nếu file chưa tồn tại, trả về Map rỗng
@@ -41,8 +41,7 @@ public class FileManager {
             return new HashMap<>();
         }
 
-        try (ObjectInputStream ois = new ObjectInputStream(
-                new FileInputStream(DATA_FILE))) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(DATA_FILE))) {
             Map<String, Account> accounts = (Map<String, Account>) ois.readObject();
             System.out.println("✓ Đã tải " + accounts.size() + " tài khoản từ file");
             return accounts;

@@ -31,14 +31,13 @@ public class AccountRepository {
     private void initializeSampleAccounts() {
         System.out.println("\n=== KHỞI TẠO DỮ LIỆU MẪU ===");
         
-        Account acc1 = new Account("1", "Lê Hải Nam", "1", 5000000);
-        Account acc2 = new Account("2", "Nguyễn Thuỳ Linh", "2", 10000000);
-        Account acc3 = new Account("3", "Nguyễn Đắc Tuấn Nghĩa", "3", 2000000);
-        Account acc4 = new Account("4", "Test", "4", 2000000);
+        Account acc1 = new Account("1", "Lê Hải Nam", "1", 15000000);
+        Account acc2 = new Account("2", "Nguyễn Thuỳ Linh", "2", 15000000);
+        Account acc3 = new Account("3", "Nguyễn Đắc Tuấn Nghĩa", "3", 15000000);
+
         accounts.put(acc1.getAccountNumber(), acc1);
         accounts.put(acc2.getAccountNumber(), acc2);
         accounts.put(acc3.getAccountNumber(), acc3);
-        accounts.put(acc4.getAccountNumber(), acc4);
         
         // Lưu ngay vào file
         saveData();
