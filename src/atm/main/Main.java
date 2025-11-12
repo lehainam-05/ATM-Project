@@ -42,7 +42,7 @@ public class Main {
         
         scanner.close();
     }
-    
+
     /**
      * Xử lý đăng nhập
      */
@@ -102,9 +102,10 @@ public class Main {
             System.out.println("║  2. Rút tiền                              ║");
             System.out.println("║  3. Nạp tiền                              ║");
             System.out.println("║  4. Xem lịch sử 5 giao dịch gần nhất      ║");
-            System.out.println("║  5. Đăng xuất                             ║");
+            System.out.println("║  5. Đổi mã PIN                            ║");
+            System.out.println("║  6. Đăng xuất                             ║");
             System.out.println("╚═══════════════════════════════════════════╝");
-            System.out.print("Chọn chức năng (1-5): ");
+            System.out.print("Chọn chức năng (1-6): ");
             
             try {
                 int choice = scanner.nextInt();
@@ -123,6 +124,9 @@ public class Main {
                         viewTransactionHistory(account);
                         break;
                     case 5:
+                        changePin(account);
+                        break;
+                    case 6:
                         continueSession = false;
                         System.out.println("\n✓ Đăng xuất thành công!");
                         System.out.println("✓ Đừng quên lấy thẻ của bạn!");
@@ -137,7 +141,7 @@ public class Main {
             }
         }
     }
-    
+
     /**
      * Kiểm tra số dư
      */
@@ -262,7 +266,7 @@ public class Main {
             scanner.nextLine(); // Clear buffer
         }
     }
-    
+
     /**
      * Xem lịch sử giao dịch
      */
@@ -271,9 +275,9 @@ public class Main {
         System.out.println("┌─────────────────────────────────────────────────────────────────────┐");
         System.out.println("│                    LỊCH SỬ 5 GIAO DỊCH GẦN NHẤT                     │");
         System.out.println("└─────────────────────────────────────────────────────────────────────┘");
-        
+
         List<Transaction> transactions = atmService.getTransactionHistory(account.getAccountNumber(), 5);
-        
+
         if (transactions.isEmpty()) {
             System.out.println("\n✗ Chưa có giao dịch nào!");
         } else {
@@ -288,5 +292,137 @@ public class Main {
 
             System.out.println("└───────────────────┴─────────────┴──────────────────┴─────────────────────┘");
         }
+    }
+
+    /**
+     * Đổi mã PIN
+     */
+    private static void changePin(Account account) {
+        System.out.println("\n");
+        System.out.println("┌─────────────────────────────────────┐");
+        System.out.println("│           ĐỔI MÃ PIN                │");
+        System.out.println("└─────────────────────────────────────┘");
+
+        int attempts = 0;
+        final int MAX_ATTEMPTS = 3;
+
+
+        try {
+            // Xác thực PIN cũ
+            String oldPin = null;
+            while (attempts < MAX_ATTEMPTS) {
+                System.out.print("\nNhập mã PIN hiện tại: ");
+                oldPin = scanner.next();
+
+                if (!account.verifyPin(oldPin)) {
+                    attempts++;
+                    System.out.println("\n✗ Mã PIN hiện tại không đúng!");
+
+                    if (attempts < MAX_ATTEMPTS) {
+                        System.out.println("→ Vui lòng thử lại (còn " + (MAX_ATTEMPTS - attempts) + " lần)\n");
+                        continue;
+                    } else {
+                        System.out.println("\n✗ Bạn đã nhập sai quá nhiều lần!");
+                        System.out.println("✗ Giao dịch bị hủy. Vui lòng thử lại sau.");
+                        return;
+                    }
+                }
+                // PIN cũ đúng, thoát vòng lặp
+                break;
+            }
+
+            //Nhập PIN mới
+            attempts = 0;
+            String newPin = null;
+            while (attempts < MAX_ATTEMPTS) {
+                System.out.print("Nhập mã PIN mới (4 chữ số): ");
+                newPin = scanner.next();
+
+                // Validate PIN mới
+                if (!isValidPin(newPin)) {
+                    attempts++;
+                    System.out.println("\n✗ Mã PIN không hợp lệ!");
+                    System.out.println(" - PIN phải có đúng 4 chữ số");
+                    System.out.println(" - PIN chỉ chứa số (0-9)");
+
+                    if (attempts < MAX_ATTEMPTS) {
+                        System.out.println("→ Vui lòng thử lại (còn " + (MAX_ATTEMPTS - attempts) + " lần)\n");
+                        continue;
+                    } else {
+                        System.out.println("\n✗ Bạn đã nhập sai quá nhiều lần!");
+                        System.out.println("✗ Giao dịch bị hủy. Vui lòng thử lại sau.");
+                        return;
+                    }
+                }
+
+                // Kiểm tra PIN mới không trùng PIN cũ
+                if (newPin.equals(oldPin)) {
+                    attempts++;
+                    System.out.println("\n✗ Mã PIN mới phải khác mã PIN cũ!");
+
+                    if (attempts < MAX_ATTEMPTS) {
+                        System.out.println("→ Vui lòng thử lại (còn " + (MAX_ATTEMPTS - attempts) + " lần)\n");
+                        continue;
+                    } else {
+                        System.out.println("\n✗ Bạn đã nhập sai quá nhiều lần!");
+                        System.out.println("✗ Giao dịch bị hủy. Vui lòng thử lại sau.");
+                        return;
+                    }
+                }
+                // PIN hợp lệ, thoát vòng lặp
+                break;
+            }
+
+            //Xác nhận PIN mới
+            attempts = 0; // Reset số lần thử
+            while (attempts < MAX_ATTEMPTS) {
+                System.out.print("Xác nhận lại mã PIN mới: ");
+                String confirmPin = scanner.next();
+
+                if (!newPin.equals(confirmPin)) {
+                    attempts++;
+                    System.out.println("\n✗ Mã PIN xác nhận không khớp!");
+
+                    if (attempts < MAX_ATTEMPTS) {
+                        System.out.println("→ Vui lòng thử lại (còn " + (MAX_ATTEMPTS - attempts) + " lần)\n");
+                        continue;
+                    } else {
+                        System.out.println("\n✗ Bạn đã nhập sai quá nhiều lần!");
+                        System.out.println("✗ Giao dịch bị hủy. Vui lòng thử lại sau.");
+                        return;
+                    }
+                }
+                // Xác nhận khớp, thoát vòng lặp
+                break;
+            }
+
+            //Thực hiện đổi PIN
+            account.setPin(newPin);
+            atmService.saveData(); // Lưu thay đổi vào file
+
+            System.out.println("\n✓ Đổi mã PIN thành công!");
+            System.out.println("✓ Vui lòng ghi nhớ mã PIN mới của bạn");
+            System.out.println("✓ Không chia sẻ mã PIN với bất kỳ ai!");
+
+        } catch (Exception e) {
+            System.out.println("\n✗ Lỗi: " + e.getMessage());
+            scanner.nextLine(); // Clear buffer
+        }
+    }
+
+    /**
+     * Kiểm tra tính hợp lệ của PIN
+     */
+    private static boolean isValidPin(String pin) {
+        if (pin.length() < 4 || pin.length() > 6) {
+            return false;
+        }
+        // Kiểm tra chỉ chứa số
+        for (char c : pin.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
