@@ -7,6 +7,7 @@ import atm.exception.InvalidAmountException;
 import atm.exception.InvalidCredentialsException;
 import atm.repository.AccountRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -33,21 +34,65 @@ public class ATMService {
     public double checkBalance(String accountNumber) {
         return accountRepository.checkBalance(accountNumber);
     }
-    
+
     /**
-     * Rút tiền
+     * Rút tiền từ tài khoản
+     * @throws InsufficientFundsException nếu số dư không đủ
+     * @throws InvalidAmountException nếu số tiền không phải bội số 50,000
      */
     public void withdraw(Account account, double amount) throws InsufficientFundsException, InvalidAmountException {
-        account.withdraw(amount);
-        accountRepository.saveData(); // Lưu ngay sau khi rút tiền
+        // Kiểm tra số tiền có phải bội số của 50,000 không
+        if (amount % 50000 != 0) {
+            throw new InvalidAmountException("Số tiền rút phải là bội số của 50,000 VND", amount);
+        }
+
+        // Kiểm tra số dư có đủ không
+        if (account.getBalance() < amount) {
+            throw new InsufficientFundsException("Số dư không đủ để thực hiện giao dịch", amount, account.getBalance());
+        }
+
+        // Thực hiện rút tiền
+        account.setBalance(account.getBalance() - amount);
+
+        // Lưu giao dịch
+        Transaction transaction = new Transaction(
+                LocalDateTime.now(),
+                "RUT_TIEN",
+                amount,
+                account.getBalance()
+        );
+        account.getTransactions().add(transaction);
+
+        // Lưu dữ liệu
+        saveData();
     }
-    
+
     /**
-     * Nạp tiền
+     * Nạp tiền vào tài khoản
      */
     public void deposit(Account account, double amount) throws InvalidAmountException {
-        account.deposit(amount);
-        accountRepository.saveData(); // Lưu ngay sau khi nạp tiền
+        // Kiểm tra số tiền hợp lệ
+        if (amount <= 0) {
+            throw new InvalidAmountException("Số tiền nạp phải lớn hơn 0", amount);
+        }
+        if (amount % 50000 != 0) {
+            throw new InvalidAmountException("Số tiền nạp phải là bội số của 50,000 VND", amount);
+        }
+
+        // Thực hiện nạp tiền
+        account.setBalance(account.getBalance() + amount);
+
+        // Lưu giao dịch
+        Transaction transaction = new Transaction(
+                LocalDateTime.now(),
+                "NAP_TIEN",
+                amount,
+                account.getBalance()
+        );
+        account.getTransactions().add(transaction);
+
+        // Lưu dữ liệu
+        saveData();
     }
     
     /**
@@ -94,7 +139,7 @@ public class ATMService {
     public void changePin(Account account, String oldPin, String newPin) throws InvalidCredentialsException, IllegalArgumentException {
 
         // Xác thực PIN cũ
-        if (!account.verifyPin(oldPin)) {
+        if (!account.isCorrectPin(oldPin)) {
             throw new InvalidCredentialsException("Mã PIN hiện tại không đúng!");
         }
         // Validate lại PIN mới (double check an toàn)
@@ -102,14 +147,7 @@ public class ATMService {
 
         // Thực hiện đổi PIN
         account.setPin(newPin);
-        accountRepository.saveData();
-    }
-
-    /**
-     * Lấy thông tin tài khoản
-     */
-    public Account getAccount(String accountNumber) {
-        return accountRepository.getAccount(accountNumber);
+        saveData();
     }
 
     /**

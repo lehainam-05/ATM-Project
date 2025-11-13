@@ -1,11 +1,7 @@
 package atm.entity;
 
-import atm.exception.InsufficientFundsException;
-import atm.exception.InvalidAmountException;
-
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,60 +30,10 @@ public class Account implements Serializable {
     /**
      * Kiểm tra PIN có đúng không
      */
-    public boolean verifyPin(String inputPin) {
+    public boolean isCorrectPin(String inputPin) {
         return this.pin.equals(inputPin);
     }
 
-    /**
-     * Rút tiền từ tài khoản
-     * @throws InsufficientFundsException nếu số dư không đủ
-     * @throws InvalidAmountException nếu số tiền không phải bội số 50,000
-     */
-    public void withdraw(double amount) throws InsufficientFundsException, InvalidAmountException {
-        // Kiểm tra số tiền có phải bội số của 50,000 không
-        if (amount % 50000 != 0) {
-            throw new InvalidAmountException("Số tiền rút phải là bội số của 50,000 VND", amount);
-        }
-        
-        // Kiểm tra số dư có đủ không
-        if (balance < amount) {
-            throw new InsufficientFundsException("Số dư không đủ để thực hiện giao dịch", amount, balance);
-        }
-        
-        // Thực hiện rút tiền
-        balance -= amount;
-        
-        // Lưu giao dịch
-        Transaction transaction = new Transaction(
-            LocalDateTime.now(),
-            "RUT_TIEN",
-            amount,
-            balance
-        );
-        transactions.add(transaction);
-    }
-
-    /**
-     * Nạp tiền vào tài khoản
-     */
-    public void deposit(double amount) throws InvalidAmountException {
-        // Kiểm tra số tiền hợp lệ
-        if (amount <= 0) {
-            throw new InvalidAmountException("Số tiền nạp phải lớn hơn 0", amount);
-        }
-        
-        // Thực hiện nạp tiền
-        balance += amount;
-        
-        // Lưu giao dịch
-        Transaction transaction = new Transaction(
-            LocalDateTime.now(),
-            "NAP_TIEN",
-            amount,
-            balance
-        );
-        transactions.add(transaction);
-    }
 
     /**
      * Lấy 5 giao dịch gần nhất
