@@ -1,4 +1,4 @@
-package atm.main;
+package atm.view;
 
 import atm.entity.Account;
 import atm.entity.Transaction;
@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Class chính chạy ứng dụng ATM
+ * View layer: xử lý giao diện console và tương tác người dùng
  */
-public class Main {
+public class ATMConsoleUI {
 
     private static Scanner scanner = new Scanner(System.in);
     private static ATMService atmService = new ATMService();
 
-    public static void main(String[] args) {
+    public static void start() {
         System.out.println("\n");
         System.out.println("╔═══════════════════════════════════════════╗");
         System.out.println("║      CHÀO MỪNG ĐẾN VỚI HỆ THỐNG ATM       ║");
