@@ -181,61 +181,54 @@ public class ATMConsoleUI {
         System.out.println("╚═══════════════════════════════════════════╝");
         System.out.print("Chọn (0-6): ");
 
-        try {
-            int choice = scanner.nextInt();
-            double amount;
+        int choice = scanner.nextInt();
+        double amount;
 
-            switch (choice) {
-                case 1:
-                    amount = 100000;
-                    break;
-                case 2:
-                    amount = 500000;
-                    break;
-                case 3:
-                    amount = 1000000;
-                    break;
-                case 4:
-                    amount = 1500000;
-                    break;
-                case 5:
-                    amount = 2000000;
-                    break;
-                case 6:
-                    // Nhập số tiền khác
-                    System.out.println("\nLưu ý: Số tiền rút phải là bội số của 50,000 VND");
-                    System.out.print("Nhập số tiền cần rút: ");
-                    amount = scanner.nextDouble();
-                    break;
-                case 0:
-                    System.out.println("\n✓ Đã hủy giao dịch");
-                    return;
-                default:
-                    System.out.println("\n✗ Lựa chọn không hợp lệ!");
-                    return;
-            }
-
-            // Kiểm tra số tiền > 0
-            if (amount <= 0) {
-                System.out.println("\n✗ Số tiền phải lớn hơn 0!");
+        switch (choice) {
+            case 1:
+                amount = 100000;
+                break;
+            case 2:
+                amount = 500000;
+                break;
+            case 3:
+                amount = 1000000;
+                break;
+            case 4:
+                amount = 1500000;
+                break;
+            case 5:
+                amount = 2000000;
+                break;
+            case 6:
+                // Nhập số tiền khác
+                System.out.println("\nLưu ý: Số tiền rút phải là bội số của 50,000 VND");
+                System.out.print("Nhập số tiền cần rút: ");
+                amount = scanner.nextDouble();
+                break;
+            case 0:
+                System.out.println("\n✓ Đã hủy giao dịch");
                 return;
-            }
-
-            // Thực hiện rút tiền
+            default:
+                System.out.println("\n✗ Lựa chọn không hợp lệ!");
+                return;
+        }
+        // Kiểm tra số tiền > 0
+        if (amount <= 0) {
+            System.out.println("\n✗ Số tiền phải lớn hơn 0!");
+            return;
+        }
+        // Thực hiện rút tiền
+        try {
             atmService.withdraw(account, amount);
-
             System.out.println("\n✓ Rút tiền thành công!");
             System.out.printf("✓ Số tiền đã rút: %,15.0f VND\n", amount);
             System.out.printf("✓ Số dư còn lại: %,15.0f VND\n", account.getBalance());
             System.out.println("\n✓ Vui lòng nhận tiền của bạn!");
-
-        } catch (InvalidAmountException e) {
-            System.out.println("\n✗ " + e.getMessage());
-        } catch (InsufficientFundsException e) {
-            System.out.println("\n✗ " + e.getMessage());
-        } catch (Exception e) {
-            System.out.println("\n✗ Lỗi: Vui lòng nhập số hợp lệ!");
-            scanner.nextLine(); // Clear buffer
+        } catch (InsufficientFundsException | InvalidAmountException e) {
+            System.out.println("\n" + e.getMessage());
+        } catch(InputMismatchException e) {
+            System.out.println("\n✗ Vui lòng nhập số hợp lệ!");
         }
     }
 
