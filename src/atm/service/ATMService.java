@@ -120,7 +120,7 @@ public class ATMService {
     /**
      * Kiểm tra PIN mới có hợp lệ không (dùng cho validation trước khi xác nhận)
      */
-    public boolean validateNewPin(String newPin, String oldPin) throws IllegalArgumentException {
+    public void validateNewPin(String newPin, String oldPin) throws IllegalArgumentException {
         // Validate PIN mới
         if (!isValidPin(newPin)) {
             throw new IllegalArgumentException("Mã PIN phải có 4-6 chữ số và chỉ chứa số (0-9)");
@@ -131,7 +131,6 @@ public class ATMService {
             throw new IllegalArgumentException("Mã PIN mới phải khác mã PIN cũ!");
         }
 
-        return true;
     }
     /**
      * Đổi mã PIN (sau khi đã validate và xác nhận)
