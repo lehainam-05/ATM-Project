@@ -1,7 +1,7 @@
 package atm.exception;
 
 /**
- * Exception ném ra khi số tiền không hợp lệ (không phải bội số 50,000)
+ * Exception ném ra khi số tiền không hợp lệ
  */
 public class InvalidAmountException extends Exception {
     
@@ -19,6 +19,6 @@ public class InvalidAmountException extends Exception {
     @Override
     public String getMessage() {
         return super.getMessage() + 
-               String.format(" (Số tiền: %,.0f VND - phải là bội số của 50,000 VND)", invalidAmount);
+               String.format(" (Số tiền: %,.0f VND)", invalidAmount);
     }
 }

@@ -67,7 +67,7 @@ public class AccountRepository {
             throw new InvalidCredentialsException("Số tài khoản không tồn tại!");
         }
         
-        if (!account.verifyPin(pin)) {
+        if (!account.isCorrectPin(pin)) {
             throw new InvalidCredentialsException("Mã PIN không chính xác!");
         }
         
