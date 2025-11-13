@@ -6,6 +6,7 @@ import atm.exception.InsufficientFundsException;
 import atm.exception.InvalidAmountException;
 import atm.exception.InvalidCredentialsException;
 import atm.service.ATMService;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -261,9 +262,9 @@ public class Main {
 
         } catch (InvalidAmountException e) {
             System.out.println("\n✗ " + e.getMessage());
-        } catch (Exception e) {
+        } catch (InputMismatchException e) {
             System.out.println("\n✗ Lỗi: Vui lòng nhập số hợp lệ!");
-            scanner.nextLine(); // Clear buffer
+            scanner.nextLine(); // clear buffer
         }
     }
 
@@ -314,7 +315,7 @@ public class Main {
                 oldPin = scanner.next();
 
                 try {
-                    if (!account.verifyPin(oldPin)) {
+                    if (!account.isCorrectPin(oldPin)) {
                         throw new InvalidCredentialsException("Mã PIN hiện tại không đúng!");
                     }
                     break; // PIN đúng, thoát vòng lặp
@@ -337,7 +338,7 @@ public class Main {
             attempts = 0; // Reset số lần thử
             String newPin = null;
             while (attempts < MAX_ATTEMPTS) {
-                System.out.print("Nhập mã PIN mới (4 chữ số): ");
+                System.out.print("Nhập mã PIN mới (4-6 chữ số): ");
                 newPin = scanner.next();
 
                 try {
