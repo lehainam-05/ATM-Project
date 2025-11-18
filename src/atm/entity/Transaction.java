@@ -72,7 +72,7 @@ public class Transaction implements Serializable {
     public String toTableRow() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         String typeDisplay = transactionType.equals("RUT_TIEN") ? "Rút tiền" : "Nạp tiền";
-        return String.format("%-17s |  %-10s | %,12.0f VND | %,15.0f VND",
+        return String.format("%-17s |  %-10s | %,15.0f VND | %,18.0f VND",
                            transactionDateTime.format(formatter),
                            typeDisplay,
                            amount,

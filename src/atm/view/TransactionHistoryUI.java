@@ -31,15 +31,15 @@ public class TransactionHistoryUI {
             System.out.println("\n✗ Chưa có giao dịch nào!");
         } else {
             System.out.println("\n");
-            System.out.println("┌───────────────────┬─────────────┬──────────────────┬─────────────────────┐");
-            System.out.println("│     Thời gian     │   Loại GD   │      Số tiền     │    Số dư sau GD     │");
-            System.out.println("├───────────────────┼─────────────┼──────────────────┼─────────────────────┤");
+            System.out.println("┌───────────────────┬─────────────┬─────────────────────┬────────────────────────┐");
+            System.out.println("│     Thời gian     │   Loại GD   │       Số tiền       │      Số dư sau GD      │");
+            System.out.println("├───────────────────┼─────────────┼─────────────────────┼────────────────────────┤");
 
             for (Transaction t : transactions) {
                 System.out.println("│ " + t.toTableRow() + " │");
             }
 
-            System.out.println("└───────────────────┴─────────────┴──────────────────┴─────────────────────┘");
+            System.out.println("└───────────────────┴─────────────┴─────────────────────┴────────────────────────┘");
         }
     }
 }
