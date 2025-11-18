@@ -29,6 +29,9 @@ public class DepositUI {
         System.out.println("└─────────────────────────────────────┘");
 
         System.out.printf("Số dư hiện tại: %,15.0f VND\n", account.getBalance());
+        System.out.println("\nLưu ý:");
+        System.out.println("- Số tiền nạp phải là bội số của 50,000 VND");
+        System.out.println("- Hạn mức tối đa: 100,000,000 VND/lần");
         System.out.print("Nhập số tiền cần nạp: ");
 
         try {

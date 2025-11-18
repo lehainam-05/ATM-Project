@@ -16,6 +16,7 @@ import java.util.List;
 public class ATMService {
     
     private final AccountRepository accountRepository;
+    private static final double MAX_DEPOSIT_AMOUNT = 100_000_000;
     
     public ATMService() {
         this.accountRepository = new AccountRepository();
@@ -74,6 +75,10 @@ public class ATMService {
         // Kiểm tra số tiền hợp lệ
         if (amount <= 0) {
             throw new InvalidAmountException("Số tiền nạp phải lớn hơn 0", amount);
+        }
+        // Kiểm tra giới hạn tối đa
+        if (amount > MAX_DEPOSIT_AMOUNT) {
+            throw new InvalidAmountException("Số tiền nạp vượt quá hạn mức cho phép (tối đa 100,000,000 VND/lần)", amount);
         }
         if (amount % 50000 != 0) {
             throw new InvalidAmountException("Số tiền nạp phải là bội số của 50,000 VND", amount);
