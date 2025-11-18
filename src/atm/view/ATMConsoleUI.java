@@ -35,8 +35,8 @@ public class ATMConsoleUI {
                 mainMenuUI.showATMMenu(loggedInAccount);
             }
 
-            System.out.print("\nBạn có muốn tiếp tục sử dụng ATM? (c/k): ");
-            String choice = scanner.next();
+            // Chỉ chấp nhận 'c' hoặc 'k'
+            String choice = getContinueChoice();
             if (choice.equalsIgnoreCase("k")) {
                 System.out.println("\n✓ Cảm ơn bạn đã sử dụng dịch vụ ATM!");
                 System.out.println("✓ Hẹn gặp lại!\n");
@@ -45,5 +45,19 @@ public class ATMConsoleUI {
         }
 
         scanner.close();
+    }
+
+    private String getContinueChoice() {
+        while (true) {
+            System.out.print("\nBạn có muốn tiếp tục sử dụng ATM? (c/k): ");
+            String choice = scanner.next().trim().toLowerCase();
+
+            if (choice.equals("c") || choice.equals("k")) {
+                return choice;
+            }
+
+            // Nếu nhập sai, yêu cầu nhập lại
+            System.out.println("✗ Vui lòng chỉ nhập 'c' (tiếp tục) hoặc 'k' (kết thúc)!");
+        }
     }
 }
