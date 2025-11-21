@@ -24,7 +24,7 @@ public class ChangePinUI {
     public void changePin(Account account) {
         System.out.println("\n");
         System.out.println("┌─────────────────────────────────────┐");
-        System.out.println("│           ĐỔI MÃ PIN                │");
+        System.out.println("│              ĐỔI MÃ PIN             │");
         System.out.println("└─────────────────────────────────────┘");
 
         int attempts = 0;
