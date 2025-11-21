@@ -1,8 +1,8 @@
-package atm.view;
+package atm.presentation;
 
-import atm.entity.Account;
-import atm.entity.Transaction;
-import atm.service.ATMService;
+import atm.data.entity.Account;
+import atm.data.entity.Transaction;
+import atm.business.ATMService;
 import java.util.List;
 
 /**

@@ -1,4 +1,4 @@
-package atm.entity;
+package atm.data.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

@@ -1,6 +1,6 @@
-package atm.util;
+package atm.data.storage;
 
-import atm.entity.Account;
+import atm.data.entity.Account;
 
 import java.io.*;
 import java.util.HashMap;

@@ -1,7 +1,7 @@
-package atm.view;
+package atm.presentation;
 
-import atm.entity.Account;
-import atm.service.ATMService;
+import atm.data.entity.Account;
+import atm.business.ATMService;
 
 /**
  * UI component cho chức năng kiểm tra số dư

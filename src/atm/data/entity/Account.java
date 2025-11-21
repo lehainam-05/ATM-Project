@@ -1,4 +1,4 @@
-package atm.entity;
+package atm.data.entity;
 
 import java.io.Serial;
 import java.io.Serializable;

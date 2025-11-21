@@ -1,11 +1,11 @@
-package atm.service;
+package atm.business;
 
-import atm.entity.Account;
-import atm.entity.Transaction;
-import atm.exception.InsufficientFundsException;
-import atm.exception.InvalidAmountException;
-import atm.exception.InvalidCredentialsException;
-import atm.repository.AccountRepository;
+import atm.data.entity.Account;
+import atm.data.entity.Transaction;
+import atm.data.exception.InsufficientFundsException;
+import atm.data.exception.InvalidAmountException;
+import atm.data.exception.InvalidCredentialsException;
+import atm.data.repository.AccountRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -1,9 +1,9 @@
-package atm.view;
+package atm.presentation;
 
-import atm.entity.Account;
-import atm.exception.InsufficientFundsException;
-import atm.exception.InvalidAmountException;
-import atm.service.ATMService;
+import atm.data.entity.Account;
+import atm.data.exception.InsufficientFundsException;
+import atm.data.exception.InvalidAmountException;
+import atm.business.ATMService;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 

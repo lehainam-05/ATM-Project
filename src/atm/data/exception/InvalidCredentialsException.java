@@ -1,4 +1,4 @@
-package atm.exception;
+package atm.data.exception;
 
 /**
  * Exception ném ra khi thông tin đăng nhập không hợp lệ

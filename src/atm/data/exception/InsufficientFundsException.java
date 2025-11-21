@@ -1,4 +1,4 @@
-package atm.exception;
+package atm.data.exception;
 
 /**
  * Exception ném ra khi số dư tài khoản không đủ

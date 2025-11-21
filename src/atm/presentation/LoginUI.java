@@ -1,8 +1,8 @@
-package atm.view;
+package atm.presentation;
 
-import atm.entity.Account;
-import atm.exception.InvalidCredentialsException;
-import atm.service.ATMService;
+import atm.data.entity.Account;
+import atm.data.exception.InvalidCredentialsException;
+import atm.business.ATMService;
 import java.util.Scanner;
 
 /**

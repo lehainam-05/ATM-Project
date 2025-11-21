@@ -1,6 +1,6 @@
 package atm.app;
 
-import atm.view.ATMConsoleUI;
+import atm.presentation.ATMConsoleUI;
 
 /**
  * Lớp khởi chạy ứng dụng ATM
