@@ -65,7 +65,7 @@ public class ATMService {
         account.getTransactions().add(transaction);
 
         // Lưu dữ liệu
-        saveData();
+        accountRepository.saveData();
     }
 
     /**
@@ -97,7 +97,7 @@ public class ATMService {
         account.getTransactions().add(transaction);
 
         // Lưu dữ liệu
-        saveData();
+        accountRepository.saveData();
     }
     
     /**
@@ -151,13 +151,7 @@ public class ATMService {
 
         // Thực hiện đổi PIN
         account.setPin(newPin);
-        saveData();
-    }
-
-    /**
-     * Lưu dữ liệu
-     */
-    public void saveData() {
         accountRepository.saveData();
     }
+
 }
