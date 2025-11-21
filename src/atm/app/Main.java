@@ -9,11 +9,6 @@ import atm.view.ATMConsoleUI;
 public class Main {
     public static void main(String[] args) {
         ATMConsoleUI ui = new ATMConsoleUI();
-        try {
             ui.start();
-        } catch (Exception e) {
-            System.err.println("Lỗi hệ thống: " + e.getMessage());
-            System.exit(1);
-        }
     }
 }
