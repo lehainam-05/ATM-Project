@@ -6,29 +6,31 @@ import atm.data.exception.InsufficientFundsException;
 import atm.data.exception.InvalidAmountException;
 import atm.data.exception.InvalidCredentialsException;
 import atm.data.repository.AccountRepository;
-
-import java.time.LocalDateTime;
+import atm.data.repository.TransactionRepository;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Service xử lý logic nghiệp vụ cho ATM
  */
 public class ATMService {
-    
+
     private final AccountRepository accountRepository;
+    private final TransactionRepository transactionRepository; // ← THÊM MỚI
     private static final double MAX_DEPOSIT_AMOUNT = 100_000_000;
-    
+
     public ATMService() {
         this.accountRepository = new AccountRepository();
+        this.transactionRepository = new TransactionRepository(); // ← THÊM MỚI
     }
-    
+
     /**
      * Đăng nhập vào ATM
      */
     public Account login(String accountNumber, String pin) throws InvalidCredentialsException {
         return accountRepository.login(accountNumber, pin);
     }
-    
+
     /**
      * Kiểm tra số dư
      */
@@ -55,14 +57,8 @@ public class ATMService {
         // Thực hiện rút tiền
         account.setBalance(account.getBalance() - amount);
 
-        // Lưu giao dịch
-        Transaction transaction = new Transaction(
-                LocalDateTime.now(),
-                "RUT_TIEN",
-                amount,
-                account.getBalance()
-        );
-        account.getTransactions().add(transaction);
+        // ✅ SỬA: Lưu giao dịch qua TransactionRepository
+        transactionRepository.addTransaction(account, "RUT_TIEN", amount);
 
         // Lưu dữ liệu
         accountRepository.saveData();
@@ -87,24 +83,22 @@ public class ATMService {
         // Thực hiện nạp tiền
         account.setBalance(account.getBalance() + amount);
 
-        // Lưu giao dịch
-        Transaction transaction = new Transaction(
-                LocalDateTime.now(),
-                "NAP_TIEN",
-                amount,
-                account.getBalance()
-        );
-        account.getTransactions().add(transaction);
+        // ✅ SỬA: Lưu giao dịch qua TransactionRepository
+        transactionRepository.addTransaction(account, "NAP_TIEN", amount);
 
         // Lưu dữ liệu
         accountRepository.saveData();
     }
-    
+
     /**
      * Xem lịch sử giao dịch
      */
     public List<Transaction> getTransactionHistory(String accountNumber, int limit) {
-        return accountRepository.getRecentTransactions(accountNumber, limit);
+        Account account = accountRepository.getAccount(accountNumber);
+        if (account != null) {
+            return transactionRepository.getRecentTransactions(account, limit);
+        }
+        return new ArrayList<>();
     }
 
     /**
@@ -122,6 +116,7 @@ public class ATMService {
         }
         return true;
     }
+
     /**
      * Kiểm tra PIN mới có hợp lệ không (dùng cho validation trước khi xác nhận)
      */
@@ -135,8 +130,8 @@ public class ATMService {
         if (newPin.equals(oldPin)) {
             throw new IllegalArgumentException("Mã PIN mới phải khác mã PIN cũ!");
         }
-
     }
+
     /**
      * Đổi mã PIN (sau khi đã validate và xác nhận)
      */
@@ -153,5 +148,4 @@ public class ATMService {
         account.setPin(newPin);
         accountRepository.saveData();
     }
-
 }
