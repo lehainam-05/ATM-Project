@@ -9,10 +9,10 @@ import java.util.List;
  * Class đại diện cho một tài khoản ngân hàng trong hệ thống ATM
  */
 public class Account implements Serializable {
-    
+
     @Serial
     private static final long serialVersionUID = 1L;
-    
+
     private String accountNumber;      // Số tài khoản (6-10 chữ số)
     private String accountHolderName;  // Tên chủ tài khoản
     private String pin;                // Mã PIN (4-6 chữ số)
@@ -33,20 +33,7 @@ public class Account implements Serializable {
     public boolean isCorrectPin(String inputPin) {
         return this.pin.equals(inputPin);
     }
-
-
-    /**
-     * Lấy 5 giao dịch gần nhất
-     */
-    public List<Transaction> getRecentTransactions(int limit) {
-        int size = transactions.size();
-        if (size == 0) {
-            return new ArrayList<>();
-        }
-        
-        int fromIndex = Math.max(0, size - limit);
-        return new ArrayList<>(transactions.subList(fromIndex, size));
-    }
+    
 
     // Getters and Setters
     public String getAccountNumber() {
@@ -88,5 +75,4 @@ public class Account implements Serializable {
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
     }
-
 }
