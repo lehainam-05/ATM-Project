@@ -57,7 +57,7 @@ public class ATMService {
         // Thực hiện rút tiền
         account.setBalance(account.getBalance() - amount);
 
-        // ✅ SỬA: Lưu giao dịch qua TransactionRepository
+        //Lưu giao dịch qua TransactionRepository
         transactionRepository.addTransaction(account, "RUT_TIEN", amount);
 
         // Lưu dữ liệu
@@ -83,7 +83,7 @@ public class ATMService {
         // Thực hiện nạp tiền
         account.setBalance(account.getBalance() + amount);
 
-        // ✅ SỬA: Lưu giao dịch qua TransactionRepository
+        // Lưu giao dịch qua TransactionRepository
         transactionRepository.addTransaction(account, "NAP_TIEN", amount);
 
         // Lưu dữ liệu
@@ -135,7 +135,8 @@ public class ATMService {
     /**
      * Đổi mã PIN (sau khi đã validate và xác nhận)
      */
-    public void changePin(Account account, String oldPin, String newPin) throws InvalidCredentialsException, IllegalArgumentException {
+    public void changePin(Account account, String oldPin, String newPin)
+            throws InvalidCredentialsException, IllegalArgumentException {
 
         // Xác thực PIN cũ
         if (!account.isCorrectPin(oldPin)) {
