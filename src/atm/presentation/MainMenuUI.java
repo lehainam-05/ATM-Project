@@ -9,17 +9,15 @@ import java.util.Scanner;
  */
 public class MainMenuUI {
 
-    private Scanner scanner;
-    private ATMService atmService;
-    private BalanceUI balanceUI;
-    private WithdrawUI withdrawUI;
-    private DepositUI depositUI;
-    private TransactionHistoryUI transactionHistoryUI;
-    private ChangePinUI changePinUI;
+    private final Scanner scanner;
+    private final BalanceUI balanceUI;
+    private final WithdrawUI withdrawUI;
+    private final DepositUI depositUI;
+    private final TransactionHistoryUI transactionHistoryUI;
+    private final ChangePinUI changePinUI;
 
     public MainMenuUI(Scanner scanner, ATMService atmService) {
         this.scanner = scanner;
-        this.atmService = atmService;
         this.balanceUI = new BalanceUI(atmService);
         this.withdrawUI = new WithdrawUI(scanner, atmService);
         this.depositUI = new DepositUI(scanner, atmService);
