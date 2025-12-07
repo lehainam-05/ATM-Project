@@ -5,7 +5,7 @@ package atm.data.exception;
  */
 public class InvalidAmountException extends Exception {
     
-    private double invalidAmount;
+    private final double invalidAmount;
     
     public InvalidAmountException(String message, double invalidAmount) {
         super(message);

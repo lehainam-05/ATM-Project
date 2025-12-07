@@ -8,7 +8,7 @@ import atm.business.ATMService;
  */
 public class BalanceUI {
 
-    private ATMService atmService;
+    private final ATMService atmService;
 
     public BalanceUI(ATMService atmService) {
         this.atmService = atmService;

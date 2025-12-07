@@ -4,6 +4,7 @@ import atm.data.entity.Account;
 import atm.data.exception.InvalidCredentialsException;
 import atm.business.ATMService;
 import java.util.Scanner;
+import java.io.Console;
 
 /**
  * UI component xử lý đăng nhập
@@ -60,5 +61,24 @@ public class LoginUI {
         }
 
         return null;
+    }
+
+    /**
+     * Đọc password an toàn (không hiển thị trên màn hình)
+     * Hoạt động khi chạy trên Terminal/Command Prompt
+     */
+    private String readPasswordSecure(String prompt) {
+        Console console = System.console();
+
+        if (console != null) {
+            // Chạy trên Terminal → Password hoàn toàn ẩn
+            System.out.print(prompt);
+            char[] passwordChars = console.readPassword();
+            return new String(passwordChars);
+        } else {
+            // Chạy trong IDE → Fallback (hiển thị bình thường)
+            System.out.print(prompt + "(IDE mode - không ẩn): ");
+            return scanner.next();
+        }
     }
 }

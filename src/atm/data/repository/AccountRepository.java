@@ -1,10 +1,8 @@
 package atm.data.repository;
 
 import atm.data.entity.Account;
-import atm.data.entity.Transaction;
 import atm.data.exception.InvalidCredentialsException;
 import atm.data.storage.FileManager;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,7 +11,7 @@ import java.util.Map;
  */
 public class AccountRepository {
 
-    private Map<String, Account> accounts;
+    private final Map<String, Account> accounts;
 
     public AccountRepository() {
         // Đọc dữ liệu từ file khi khởi tạo

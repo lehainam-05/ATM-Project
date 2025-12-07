@@ -9,14 +9,13 @@ import java.util.Scanner;
  */
 public class ATMConsoleUI {
 
-    private Scanner scanner;
-    private ATMService atmService;
-    private LoginUI loginUI;
-    private MainMenuUI mainMenuUI;
+    private final Scanner scanner;
+    private final LoginUI loginUI;
+    private final MainMenuUI mainMenuUI;
 
     public ATMConsoleUI() {
         this.scanner = new Scanner(System.in);
-        this.atmService = new ATMService();
+        ATMService atmService = new ATMService();
         this.loginUI = new LoginUI(scanner, atmService);
         this.mainMenuUI = new MainMenuUI(scanner, atmService);
     }

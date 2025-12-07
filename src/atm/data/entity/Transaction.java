@@ -1,5 +1,6 @@
 package atm.data.entity;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,6 +10,7 @@ import java.time.format.DateTimeFormatter;
  */
 public class Transaction implements Serializable {
     
+    @Serial
     private static final long serialVersionUID = 1L;
     
     private LocalDateTime transactionDateTime;

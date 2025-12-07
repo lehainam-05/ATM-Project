@@ -10,8 +10,8 @@ import java.util.Scanner;
  */
 public class ChangePinUI {
 
-    private Scanner scanner;
-    private ATMService atmService;
+    private final Scanner scanner;
+    private final ATMService atmService;
 
     public ChangePinUI(Scanner scanner, ATMService atmService) {
         this.scanner = scanner;

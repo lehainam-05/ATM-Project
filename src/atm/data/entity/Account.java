@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Class đại diện cho một tài khoản ngân hàng trong hệ thống ATM
  */
-public class Account implements Serializable {
+public class Account implements Serializable { //Marker Interface:báo cho JVM biết rằng class được phép tuần tự hóa
 
     @Serial
     private static final long serialVersionUID = 1L;

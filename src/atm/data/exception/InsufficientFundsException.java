@@ -5,8 +5,8 @@ package atm.data.exception;
  */
 public class InsufficientFundsException extends Exception {
     
-    private double requestedAmount;
-    private double availableBalance;
+    private final double requestedAmount;
+    private final double availableBalance;
     
     public InsufficientFundsException(String message, double requestedAmount, double availableBalance) {
         super(message);
